@@ -11,8 +11,11 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Query untuk mengambil data suhu dari kedua chiller
-$sql = "SELECT id, suhuchiller1, suhuchiller2, timestamp FROM iot_project";
+// Menerima tanggal yang dipilih dari permintaan AJAX
+$date = $_GET["date"];
+
+// Modifikasi query SQL untuk memfilter data berdasarkan tanggal
+$sql = "SELECT id, suhuchiller1, suhuchiller2, timestamp FROM iot_project WHERE DATE(timestamp) = '$date'";
 $result = $conn->query($sql);
 
 $data = array();
