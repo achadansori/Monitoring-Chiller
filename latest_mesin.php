@@ -11,16 +11,15 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Query untuk mengambil data suhu terbaru dari tabel node_chiller
-$sql = "SELECT suhuchiller1, suhuchiller2 FROM node_chiller ORDER BY timestamp DESC LIMIT 1";
+// Query untuk mengambil data keadaan mesin terbaru dari tabel node_mesin
+$sql = "SELECT keadaan FROM node_mesin ORDER BY timestamp DESC LIMIT 1";
 $result = $conn->query($sql);
 
 $data = array();
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $data = array(
-        'suhuchiller1' => $row['suhuchiller1'],
-        'suhuchiller2' => $row['suhuchiller2']
+        'keadaan' => $row['keadaan']
     );
 }
 

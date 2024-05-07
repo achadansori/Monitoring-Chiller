@@ -1,7 +1,7 @@
 <?php
 // Koneksi ke database
 $dbhost = 'localhost';
-$dbname = 'example';
+$dbname = 'monitoring_toshin';
 $dbuser = 'root';
 $dbpass = '';
 
@@ -15,7 +15,7 @@ if ($conn->connect_error) {
 $date = $_GET["date"];
 
 // Modifikasi query SQL untuk memfilter data berdasarkan tanggal
-$sql = "SELECT id, suhuchiller1, suhuchiller2, timestamp FROM iot_project WHERE DATE(timestamp) = '$date'";
+$sql = "SELECT id, suhuchiller1, suhuchiller2, timestamp FROM node_chiller WHERE DATE(timestamp) = '$date'";
 $result = $conn->query($sql);
 
 $data = array();

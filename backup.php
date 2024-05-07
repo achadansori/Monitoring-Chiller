@@ -65,20 +65,12 @@
             float: right;
         }
 
-        #lampmesin1 {
+        #lampmesin {
             width: 100px; /* Mengubah lebar lampu */
             height: 100px; /* Mengubah tinggi lampu */
             border-radius: 40px; /* Menyesuaikan border-radius agar tetap bulat */
             margin-top: 0px;
-            margin-left: 0px;
-            float: left;
-        }
-        #lampmesin2 {
-            width: 100px; /* Mengubah lebar lampu */
-            height: 100px; /* Mengubah tinggi lampu */
-            border-radius: 40px; /* Menyesuaikan border-radius agar tetap bulat */
-            margin-top: 0px;
-            margin-left: 0px;
+            margin-left: 0; /* Mengatur margin kiri menjadi 0 */
             float: left;
         }
     </style>
@@ -122,25 +114,13 @@
                     <label for="warningTemperature">Suhu Peringatan (°C):</label>
                     <input type="number" id="warningTemperature" value="30" min="0" step="1">
                     <button onclick="setWarningTemperature()">Set</button>
-                    </div>
-                    <br>
-                    <h2>Monitoring Mesin</h2>
-                    <table style="width: fit-content; margin-right: 20px;">
-                        <tr>
-                            <td style="text-align: center; border-width: 2px; border-style: solid;">
-                                <h4>MESIN 1</h4>
-                                <div id="lampmesin1" style="width: 100px; height: 100px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;"></div>
-                            </td>
-                            <td style="text-align: center; border-width: 2px; border-style: solid;">
-                                <h4>MESIN 2</h4>
-                                <div id="lampmesin2" style="width: 100px; height: 100px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;"></div>
-                            </td>
-                        </tr>
-                    </table>
-
-
-
                 </div>
+                <br>
+                <h2>Monitoring Mesin</h2>
+                <h4>MESIN 1</h4>
+                <div id="lampmesin" style="width: 100px; height: 100px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;"></div>
+            </div>
+        </div>
 
         <!-- Tabel (Tabel Chiller) -->
         <div id="tablechiller" style="display:none;">
@@ -247,6 +227,7 @@
             });
         }
 
+
         function loadmesinData() {
             var selectedDate = $("#datepickerMesin").val(); // Ambil tanggal yang dipilih
             $.ajax({
@@ -254,9 +235,24 @@
                 dataType: "json",
                 data: { date: selectedDate }, // Kirim tanggal yang dipilih sebagai parameter
                 success: function(data) {
-                    // Memperbarui tabel (hanya jika di halaman Tabel)
-                    if ($("#tablemesin").is(":visible")) {
-                        updateTableMesin(data); // Memperbarui tabel dengan data terbaru
+                }
+                error: function(xhr, status, error) {
+                    console.error("Error loading temperature data: " + error); // Menampilkan pesan kesalahan jika terjadi
+                }
+        });
+            $.ajax({
+                url: "latest_mesin.php", // URL script PHP yang akan mengembalikan data dari server
+                dataType: "json",
+                success: function(data) {
+                    // Memperbarui lampu mesin berdasarkan keadaan yang diterima dari server
+                    if (data.keadaan === "ON") {
+                        // Jika keadaan adalah ON, atur warna lampu menjadi hijau dan teks menjadi ON
+                        $("#lampmesin").css("background-color", "green");
+                        $("#lampmesin").text("ON");
+                    } else {
+                        // Jika keadaan bukan ON, atur warna lampu menjadi merah dan teks menjadi OFF
+                        $("#lampmesin").css("background-color", "red");
+                        $("#lampmesin").text("OFF");
                     }
                 },
                 error: function(xhr, status, error) {
@@ -270,31 +266,12 @@
                     // Memperbarui lampu mesin berdasarkan keadaan yang diterima dari server
                     if (data.keadaan === "ON") {
                         // Jika keadaan adalah ON, atur warna lampu menjadi hijau dan teks menjadi ON
-                        $("#lampmesin1").css("background-color", "green");
-                        $("#lampmesin1").text("ON");
+                        $("#lampmesin").css("background-color", "green");
+                        $("#lampmesin").text("ON");
                     } else {
                         // Jika keadaan bukan ON, atur warna lampu menjadi merah dan teks menjadi OFF
-                        $("#lampmesin1").css("background-color", "red");
-                        $("#lampmesin1").text("OFF");
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error("Error loading data: " + error); // Menampilkan pesan kesalahan jika terjadi
-                }
-            });
-            $.ajax({
-                url: "latest_mesin.php", // URL script PHP yang akan mengembalikan data dari server
-                dataType: "json",
-                success: function(data) {
-                    // Memperbarui lampu mesin berdasarkan keadaan yang diterima dari server
-                    if (data.keadaan === "ON") {
-                        // Jika keadaan adalah ON, atur warna lampu menjadi hijau dan teks menjadi ON
-                        $("#lampmesin2").css("background-color", "green");
-                        $("#lampmesin2").text("ON");
-                    } else {
-                        // Jika keadaan bukan ON, atur warna lampu menjadi merah dan teks menjadi OFF
-                        $("#lampmesin2").css("background-color", "red");
-                        $("#lampmesin2").text("OFF");
+                        $("#lampmesin").css("background-color", "red");
+                        $("#lampmesin").text("OFF");
                     }
                 },
                 error: function(xhr, status, error) {
@@ -302,6 +279,7 @@
                 }
             });
         }
+
 
 
 
@@ -422,12 +400,14 @@
         }
 
         // Memanggil fungsi untuk memuat data suhu saat halaman dimuat
+        // Memanggil fungsi untuk memuat data mesin saat halaman dimuat
         $(document).ready(function() {
             showDashboard(); // Secara default, tampilkan menu Dashboard saat halaman dimuat
             // Mengatur interval untuk memperbarui data suhu setiap 5 detik (5000 milidetik)
             setInterval(loadsuhuchillerData, 5000);
             setInterval(loadmesinData, 5000);
         });
+
     </script>
 </body>
 </html>
