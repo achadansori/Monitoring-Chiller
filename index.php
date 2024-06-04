@@ -310,21 +310,6 @@
             loadsuhuchillerData(); // Memuat ulang data untuk menyesuaikan warna lampu
         }
 
-        function sendWarningTemperature() {
-            var warningTemperature = $("#warningTemperature").val(); // Ambil suhu peringatan dari input
-            $.ajax({
-                url: "send_temperature_to_esp.php", // URL script PHP di ESP32
-                method: "POST",
-                data: { warningTemperature: warningTemperature }, // Kirim suhu peringatan ke ESP32
-                success: function(response) {
-                    console.log("Data successfully sent to ESP32");
-                },
-                error: function(xhr, status, error) {
-                    console.error("Error sending data to ESP32: " + error); // Menampilkan pesan kesalahan jika terjadi
-                }
-            });
-        }
-
         // Fungsi untuk menghapus data terpilih
         function deleteSelectedChiller() {
             var selected = $("input[name='selected[]']:checked").map(function(){
@@ -395,6 +380,21 @@
                 });
             }
         }
+        function sendWarningTemperature() {
+            var warningTemperature = $("#warningTemperature").val(); // Ambil suhu peringatan dari input
+            $.ajax({
+                url: "send_temperature_to_esp.php", // URL script PHP di ESP32
+                method: "POST",
+                data: { warningTemperature: warningTemperature }, // Kirim suhu peringatan ke ESP32
+                success: function(response) {
+                    console.log("Data successfully sent to ESP32");
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error sending data to ESP32: " + error); // Menampilkan pesan kesalahan jika terjadi
+                }
+            });
+        }
+
 
         // Fungsi untuk menampilkan menu Dashboard dan menyembunyikan menu Tabel
         function showDashboard() {
