@@ -119,9 +119,9 @@
                 </div>
                 <!-- Input suhu peringatan -->
                 <div>
-                    <label for="warningTemperature">Suhu Peringatan (°C):</label>
-                    <input type="number" id="warningTemperature" value="30" min="0" step="1">
-                    <button onclick="setWarningTemperature()">Set</button>
+                     <!-- <label for="warningTemperature">Suhu Peringatan (°C):</label> -->
+                    <!--<input type="number" id="warningTemperature" value="30" min="0" step="1">
+                    <button onclick="setWarningTemperature()">Set</button> --> 
                     </div>
                     <br>
                     <h2>Monitoring Mesin</h2>
@@ -231,7 +231,7 @@
                     $("#suhuchiller2Value").text(data.suhuchiller2);
 
                     // Memperbarui warna lampu berdasarkan suhu
-                    var warningTemperature = parseInt($("#warningTemperature").val()); // Ambil nilai suhu peringatan dari input
+                    var warningTemperature = 30; // Tentukan nilai suhu peringatan
                     if (parseFloat(data.suhuchiller1) > warningTemperature || parseFloat(data.suhuchiller2) > warningTemperature) {
                         $("#lamp").css("background-color", "red"); // Jika suhu di atas suhu peringatan, warna lampu menjadi merah
                         $("#lamp").text("Bahaya"); // Tampilkan "Bahaya" di tengah lampu
@@ -306,9 +306,9 @@
 
 
         // Fungsi untuk mengatur suhu peringatan
-        function setWarningTemperature() {
-            loadsuhuchillerData(); // Memuat ulang data untuk menyesuaikan warna lampu
-        }
+        //function setWarningTemperature() {
+        //    loadsuhuchillerData(); // Memuat ulang data untuk menyesuaikan warna lampu
+        //}
 
         // Fungsi untuk menghapus data terpilih
         function deleteSelectedChiller() {

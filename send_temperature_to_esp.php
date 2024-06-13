@@ -3,7 +3,7 @@
 $temperature = $_GET['temperature'];
 
 // URL perangkat ESP yang akan menerima data
-$esp_url = 'http://10.100.4.177/temperature_receiver';
+$esp_url = 'http://10.100.4.60/temperature_receiver';
 
 // Data yang akan dikirim dalam format JSON
 $data = array('temperature' => $temperature);
